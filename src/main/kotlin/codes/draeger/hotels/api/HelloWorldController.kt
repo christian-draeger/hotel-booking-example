@@ -1,5 +1,9 @@
 package codes.draeger.hotels.api
 
+import codes.draeger.hotels.model.Hotel
+import codes.draeger.hotels.model.Review
+import codes.draeger.hotels.repository.HotelRepository
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -8,29 +12,34 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class HelloWorldController {
+class HelloWorldController(
+    private val hotelRepository: HotelRepository
+) {
 
-    @GetMapping("/json-example")
-    fun sayHello() = MyResponseData(
-        name = "chris",
-        foo = listOf(
-            Foo(30, 187),
-            Foo(60, 210)
-        )
-    )
-
-    @PostMapping("/add-data")
+    @PostMapping("/add")
     fun addData(
-        @RequestBody body: String
-    ) = body.uppercase()
+        @RequestBody body: Hotel
+    ) {
+        hotelRepository.addHotel(body)
+    }
+
+    @GetMapping("/all")
+    fun getAllHotels() = hotelRepository.listAll()
+
+    @PostMapping("/add-review/{id}")
+    fun addReview(
+        @PathVariable id: String,
+        @RequestBody body: Review
+    ) {
+        val hotel = hotelRepository.listAll().find { it.id == id } ?: throw IllegalArgumentException("hotel with id $id not known")
+        hotel.reviews.add(body)
+        hotelRepository.updateHotel(hotel)
+    }
+
+    @DeleteMapping("/remove/{id}")
+    fun removeHotel(
+        @PathVariable id: String
+    ) {
+        hotelRepository.deleteHotel(id)
+    }
 }
-
-data class MyResponseData(
-    val name: String,
-    val foo: List<Foo>
-)
-
-data class Foo(
-    val age: Int,
-    val size: Int?
-)
