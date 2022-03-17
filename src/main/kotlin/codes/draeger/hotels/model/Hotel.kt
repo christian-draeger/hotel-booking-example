@@ -24,3 +24,19 @@ data class Review(
         require(stars in 1..5) { "ratings are only allowed to be in range between 1 and 5" }
     }
 }
+
+fun aDummyHotel(
+    name: String = "Holiday-Inn",
+    street: String = "Vacation street",
+    number: String = "35B",
+    zipCode: String = "12345",
+    city: String = "Berlin"
+) = Hotel(
+    name = name,
+    address = Address(
+        street = street,
+        number = number,
+        zipCode = zipCode,
+        city = city
+    )
+)

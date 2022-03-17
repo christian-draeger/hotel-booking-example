@@ -25,5 +25,9 @@ class HotelRepository {
         }
     }
 
+    fun deleteAll() {
+        hotels.clear()
+    }
+
     private fun getHotelById(id: String) = hotels.find { it.id == id }
 }
