@@ -2,6 +2,7 @@ package codes.draeger.hotels.api
 
 import codes.draeger.hotels.model.Hotel
 import codes.draeger.hotels.model.Review
+import codes.draeger.hotels.model.Room
 import codes.draeger.hotels.repository.HotelRepository
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,6 +33,16 @@ class HotelController(
     ) {
         val hotel = hotelRepository.listAll().find { it.id == id } ?: throw IllegalArgumentException("hotel with id $id not known")
         hotel.reviews.add(body)
+        hotelRepository.updateHotel(hotel)
+    }
+
+    @PostMapping("/add-room/{id}")
+    fun addRoom(
+        @PathVariable id: String,
+        @RequestBody body: Room
+    ) {
+        val hotel = hotelRepository.listAll().find { it.id == id } ?: throw IllegalArgumentException("hotel with id $id not known")
+        hotel.rooms.add(body)
         hotelRepository.updateHotel(hotel)
     }
 
