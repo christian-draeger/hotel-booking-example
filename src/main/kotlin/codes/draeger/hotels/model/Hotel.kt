@@ -7,6 +7,7 @@ data class Hotel(
     val name: String,
     val address: Address,
     var reviews: MutableList<Review> = mutableListOf(),
+    var rooms: MutableList<Room> = mutableListOf(),
 )
 
 data class Address(
@@ -22,6 +23,20 @@ data class Review(
 ) {
     init {
         require(stars in 1..5) { "ratings are only allowed to be in range between 1 and 5" }
+    }
+}
+//working on  rooms
+enum class Status {
+    FREE, NEEDS_CLEANING, OCCUPIED
+}
+data class Room(
+    val room_number: Int ,
+    val status: Status
+)
+
+{
+    init {
+        require(room_number >0) { "Room number must be greater than 0" }
     }
 }
 
