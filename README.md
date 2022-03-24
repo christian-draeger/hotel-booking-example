@@ -1,16 +1,19 @@
-# Exercise
+# Hotel Booking
 
-We already have a repository of hotels.
-Hotels can be added (`POST /add`), listed (`GET /all`) and removed (`DELETE /remove/{id}`) via our Rest Endpoints already.
+> Prerequisite: docker installation on your machine to be able to run application and tests! (please see https://docs.docker.com/get-docker/)
 
-Furthermore, we can add reviews to a certain hotel (`POST /add-review/{id}`)
+We already have a repository of hotels to store hotels to a Postgres Database.
 
-Similar to the already provided reviews functionality we want to be able to add rooms to a given hotel by its id like this:
-`POST /add-room/{id}` and pass room number as body
+To make our application usable to others we have implemented a REST API that provides several endpoints.
+To see all our available Endpoints and to  be able to call them in a convenient way we also added Swagger.
+This allows us to open [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) and see the SwaggerUI with always up-to-date documentation of our endpoints as well as the ability to execute http requests from the UI against them.
 
-To be able to do so please extend the Hotel model that it can have multiple rooms.
-A room should have a room number and a status (FREE (default), NEEDS_CLEANING, OCCUPIED) (tip have a look at enum types in kotlin).
+## How to Start application
+```shell
+./gradlew bootRun
+```
 
-Afterward please create another endpoint that allows us to change the status of a given hotels room.
-
-!!! please write tests
+## How to execute all tests
+```shell
+./gradlew build
+```
