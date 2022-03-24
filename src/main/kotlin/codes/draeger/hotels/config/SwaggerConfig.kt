@@ -1,15 +1,14 @@
-package codes.draeger.config
+package codes.draeger.hotels.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
-import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class SwaggerConfig() {
+class SwaggerConfig {
 
     @Bean
     fun customOpenAPI(): OpenAPI {
@@ -18,7 +17,7 @@ class SwaggerConfig() {
             .info(
                 Info()
                     .title("Hotel API")
-                    .version("")
+                    .version("v1")
                     .description("Documentation for Hotel API")
                     .contact(
                         Contact()

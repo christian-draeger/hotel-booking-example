@@ -22,7 +22,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
 
-	val springDocVersion = "1.5.12"
+	val springDocVersion = "1.6.6"
 	implementation("org.springdoc:springdoc-openapi-ui:$springDocVersion")
 	implementation("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
 
