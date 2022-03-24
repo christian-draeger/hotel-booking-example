@@ -22,6 +22,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql")
 
+	val springDocVersion = "1.5.12"
+	implementation("org.springdoc:springdoc-openapi-ui:$springDocVersion")
+	implementation("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
