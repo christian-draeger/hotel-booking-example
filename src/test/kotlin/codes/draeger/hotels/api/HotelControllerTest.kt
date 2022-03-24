@@ -1,7 +1,7 @@
 package codes.draeger.hotels.api
 
 import codes.draeger.hotels.model.*
-import codes.draeger.hotels.repository.HotelRepository
+import codes.draeger.hotels.repository.DummyHotelRepository
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ import strikt.assertions.containsExactly
 @SpringBootTest
 @AutoConfigureMockMvc
 internal class HotelControllerTest(
-    @Autowired val hotelRepository: HotelRepository,
+    @Autowired val hotelRepository: DummyHotelRepository,
     @Autowired val mockMvc: MockMvc,
 ) {
     val testHotel = aDummyHotel()
