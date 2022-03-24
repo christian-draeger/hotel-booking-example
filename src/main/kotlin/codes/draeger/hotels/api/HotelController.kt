@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class HotelController(
-    private val dummyHotelRepository: DummyHotelRepository,
     private val hotelRepository: HotelRepository,
     private val reviewRepository: ReviewRepository,
     private val hotelService: HotelService,
