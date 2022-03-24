@@ -1,9 +1,7 @@
 package codes.draeger.hotels.model
 
-import java.util.*
-
 data class Hotel(
-    val id: String = UUID.randomUUID().toString(),
+    val id: Int = 0,
     val name: String,
     val address: Address,
     var reviews: MutableList<Review> = mutableListOf(),
@@ -29,7 +27,7 @@ data class Room(
     val roomNumber: Int,
     var status: RoomStatus = RoomStatus.FREE
 )
-enum class RoomStatus(){
+enum class RoomStatus {
     FREE,
     NEEDS_CLEANING,
     OCCUPIED
