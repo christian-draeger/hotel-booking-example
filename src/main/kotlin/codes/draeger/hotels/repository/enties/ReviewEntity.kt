@@ -1,5 +1,6 @@
 package codes.draeger.hotels.repository.enties
 
+import codes.draeger.hotels.model.Review
 import java.util.*
 import javax.persistence.*
 
@@ -34,3 +35,8 @@ class ReviewEntity(
         updated = Date()
     }
 }
+
+fun ReviewEntity.toReview() = Review(
+    message = message ?: "",
+    stars = stars
+)

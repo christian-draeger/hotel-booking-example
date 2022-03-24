@@ -19,22 +19,22 @@ class HotelController(
 ) {
     @PostMapping("/add")
     fun addData(
-        @RequestBody body: Hotel
+        @RequestBody body: HotelRequest
     ) {
-        hotelService.addHotel(body)
+        hotelService.addHotel(body.toHotel())
     }
 
     @GetMapping("/all")
-    fun getAllHotels(): List<HotelResponse> = hotelRepository.findAll().map { it.toHotelResponse() }
+    fun getAllHotels(): List<Hotel> = hotelService.getAll()
 
-    @GetMapping("/all/{id}")
+    @GetMapping("/{id}")
     fun getOneHotel(@PathVariable id: Int): HotelResponse = hotelRepository.findById(id).get().toHotelResponse()
 
     @DeleteMapping("/remove/{id}")
     fun removeHotel(
         @PathVariable id: Int
     ) {
-        hotelRepository.deleteById(id)
+        hotelService.delete(id)
     }
 
     @PostMapping("/add-review/{id}")
@@ -81,6 +81,28 @@ fun HotelEntity.toHotelResponse() = HotelResponse(
     reviews = reviews,
     rooms = emptyList() // TODO
 )
+
+data class HotelRequest(
+    val name: String,
+    val address: Address
+) {
+    data class Address(
+        val street: String,
+        val number: String,
+        val zipCode: String,
+        val city: String
+    )
+
+    fun toHotel() = Hotel(
+        name = name,
+        address = codes.draeger.hotels.model.Address(
+            street = address.street,
+            number = address.number,
+            zipCode = address.zipCode,
+            city = address.city
+        )
+    )
+}
 
 data class HotelResponse(
     val id: String,

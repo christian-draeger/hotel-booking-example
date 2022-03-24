@@ -1,6 +1,8 @@
 package codes.draeger.hotels.repository.enties
 
+import codes.draeger.hotels.model.Address
 import codes.draeger.hotels.model.Hotel
+import codes.draeger.hotels.model.Review
 import java.util.*
 import javax.persistence.*
 
@@ -29,6 +31,18 @@ class AddressEntity(
     var city: String
 )
 
+fun HotelEntity.toHotel(): Hotel {
+    return Hotel(
+        name = name,
+        address = Address(
+            street = address.street,
+            number = address.number,
+            zipCode = address.zipCode,
+            city = address.city
+        ),
+        reviews = reviews.map { it.toReview() }.toMutableList()
+    )
+}
 
 fun Hotel.toHotelEntity(): HotelEntity {
     return HotelEntity(
