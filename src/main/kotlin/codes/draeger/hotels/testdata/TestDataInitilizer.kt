@@ -7,12 +7,14 @@ import codes.draeger.hotels.repository.ReviewRepository
 import codes.draeger.hotels.repository.enties.ReviewEntity
 import codes.draeger.hotels.repository.enties.toHotelEntity
 import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.annotation.Profile
 import org.springframework.context.event.EventListener
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
+@Profile("local")
 @Service
 class TestDataInitilizer(
     private val hotelRepository: HotelRepository,
