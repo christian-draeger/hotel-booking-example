@@ -1,7 +1,6 @@
 package codes.draeger.hotels.testdata
 
-import codes.draeger.hotels.model.aDummyHotel
-import codes.draeger.hotels.model.aDummyReview
+import codes.draeger.hotels.model.*
 import codes.draeger.hotels.repository.HotelRepository
 import codes.draeger.hotels.repository.ReviewRepository
 import codes.draeger.hotels.repository.enties.ReviewEntity
@@ -39,3 +38,35 @@ class TestDataInitilizer(
         reviewRepository.save(ReviewEntity(hotelId = hotel2.id, message = "was bad", stars = 1))
     }
 }
+
+fun aDummyHotel(
+    name: String = "Holiday-Inn",
+    street: String = "Vacation street",
+    number: String = "35B",
+    zipCode: String = "12345",
+    city: String = "Berlin"
+) = Hotel(
+    name = name,
+    address = Address(
+        street = street,
+        number = number,
+        zipCode = zipCode,
+        city = city
+    )
+)
+
+fun aDummyReview(
+    message: String = "great",
+    stars: Int = 4
+) = Review(
+    message = message,
+    stars = stars
+)
+
+fun aDummyRoom(
+    roomNumber: Int = 101,
+    status: RoomStatus = RoomStatus.FREE
+) = Room(
+    roomNumber = roomNumber,
+    status = status
+)
