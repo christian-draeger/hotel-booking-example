@@ -7,6 +7,7 @@ data class Hotel(
     val name: String,
     val address: Address,
     var reviews: MutableList<Review> = mutableListOf(),
+    var rooms: MutableList<Room> = mutableListOf()
 )
 
 data class Address(
@@ -24,7 +25,15 @@ data class Review(
         require(stars in 1..5) { "ratings are only allowed to be in range between 1 and 5" }
     }
 }
-
+data class Room(
+    val roomNumber: Int,
+    var status: RoomStatus = RoomStatus.FREE
+)
+enum class RoomStatus(){
+    FREE,
+    NEEDS_CLEANING,
+    OCCUPIED
+}
 fun aDummyHotel(
     name: String = "Holiday-Inn",
     street: String = "Vacation street",
@@ -39,4 +48,18 @@ fun aDummyHotel(
         zipCode = zipCode,
         city = city
     )
+)
+fun aDummyRoom(
+    roomNumber: Int = 101,
+    status: RoomStatus = RoomStatus.FREE
+) = Room(
+    roomNumber = roomNumber,
+    status = status
+)
+fun aDummyReview(
+    message: String = "great",
+    stars: Int = 4
+) = Review(
+    message = message,
+    stars = stars
 )

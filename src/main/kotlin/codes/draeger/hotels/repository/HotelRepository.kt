@@ -2,12 +2,10 @@ package codes.draeger.hotels.repository
 
 import codes.draeger.hotels.model.Hotel
 import org.springframework.stereotype.Repository
-import java.util.UUID
 
 @Repository
 class HotelRepository {
     private val hotels = mutableListOf<Hotel>()
-
     fun addHotel(hotel: Hotel) {
         hotels.add(hotel)
     }
@@ -18,7 +16,6 @@ class HotelRepository {
     }
 
     fun listAll(): MutableList<Hotel> = hotels
-
     fun deleteHotel(id: String) {
         getHotelById(id)?.run {
             hotels.remove(this)
@@ -30,4 +27,5 @@ class HotelRepository {
     }
 
     private fun getHotelById(id: String) = hotels.find { it.id == id }
+
 }
