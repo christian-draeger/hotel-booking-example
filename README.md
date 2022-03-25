@@ -10,6 +10,7 @@ This allows us to open [http://localhost:8080/swagger-ui/index.html](http://loca
 
 ## How to Start application
 ```shell
+docker compose up
 ./gradlew bootRun
 ```
 
@@ -17,3 +18,6 @@ This allows us to open [http://localhost:8080/swagger-ui/index.html](http://loca
 ```shell
 ./gradlew build
 ```
+
+## Look into Database
+Since PgAdmin will be started as part of the docker compose setup you should be able to open PgAdmin here http://localhost:5050/ .
