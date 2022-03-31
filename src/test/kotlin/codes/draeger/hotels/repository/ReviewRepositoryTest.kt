@@ -1,7 +1,7 @@
 package codes.draeger.hotels.repository
 
-import codes.draeger.hotels.repository.enties.ReviewEntity
-import codes.draeger.hotels.repository.enties.toHotelEntity
+import codes.draeger.hotels.repository.entities.ReviewEntity
+import codes.draeger.hotels.repository.entities.toHotelEntity
 import codes.draeger.hotels.testdata.aDummyHotel
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

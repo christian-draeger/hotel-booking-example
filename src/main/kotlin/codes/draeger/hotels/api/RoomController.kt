@@ -1,39 +1,48 @@
 package codes.draeger.hotels.api
 
+import codes.draeger.hotels.model.Room
 import codes.draeger.hotels.model.RoomStatus
-import com.sun.xml.bind.v2.TODO
+import codes.draeger.hotels.repository.RoomRepository
+import codes.draeger.hotels.repository.enties.RoomEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 class RoomController(
-    // private val roomRepository: RoomRepository,
+    private val roomRepository: RoomRepository
 ) {
-    @PostMapping("/room/status/{hotelId}")
-    fun addRoom(
-        @PathVariable hotelId: Int,
-        @RequestBody body: RoomStatus
-    ) {
-        // TODO
-    }
-
-
     @PostMapping("/room/add/{hotelId}")
     fun addRoom(
         @PathVariable hotelId: Int,
-        @RequestBody body: RoomRequest
+        @RequestBody body: Room
     ) {
-        // TODO
+        roomRepository.save(
+            RoomEntity(
+                roomNumber = body.roomNumber,
+                status = body.status,
+                hotelId = hotelId
+            )
+        )
     }
 
-    @PatchMapping("/room/change-status/{roomId}")
+    @PatchMapping("/room/{hotelId}/change-status/{roomId}")
     fun changeRoomStatus(
-        @PathVariable roomId: String,
-        @RequestBody body: RoomRequest
+        @PathVariable hotelId: Int,
+        @PathVariable roomId: Int,
+        @RequestBody body: RoomStatus
     ) {
-        // TODO
+        roomRepository.findByHotelId(hotelId).find { it.roomNumber == roomId }?.run {
+            this.status = body
+            roomRepository.save(this)
+        }
     }
 }
 
-data class RoomRequest(
-    val todo: TODO
+data class RoomResponse(
+    val roomNumber: Int,
+    val status: RoomStatus
+)
+
+fun Room.toRoomResponse() = RoomResponse(
+    roomNumber = roomNumber,
+    status = status
 )
