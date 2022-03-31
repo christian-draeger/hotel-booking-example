@@ -1,4 +1,3 @@
-# Hotel Booking
 
 > Prerequisite: docker installation on your machine to be able to run application and tests! (please see https://docs.docker.com/get-docker/)
 

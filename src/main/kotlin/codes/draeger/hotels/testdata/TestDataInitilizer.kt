@@ -3,8 +3,10 @@ package codes.draeger.hotels.testdata
 import codes.draeger.hotels.model.*
 import codes.draeger.hotels.repository.HotelRepository
 import codes.draeger.hotels.repository.ReviewRepository
-import codes.draeger.hotels.repository.enties.ReviewEntity
-import codes.draeger.hotels.repository.enties.toHotelEntity
+import codes.draeger.hotels.repository.RoomRepository
+import codes.draeger.hotels.repository.entities.ReviewEntity
+import codes.draeger.hotels.repository.entities.RoomEntity
+import codes.draeger.hotels.repository.entities.toHotelEntity
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.annotation.Profile
 import org.springframework.context.event.EventListener
@@ -18,6 +20,7 @@ import javax.transaction.Transactional
 class TestDataInitilizer(
     private val hotelRepository: HotelRepository,
     private val reviewRepository: ReviewRepository,
+    private val roomRepository: RoomRepository,
 ) {
 
     @Transactional
@@ -36,6 +39,20 @@ class TestDataInitilizer(
 
         val hotel2 = hotelRepository.save(aDummyHotel(name = "Other Hotel").toHotelEntity())
         reviewRepository.save(ReviewEntity(hotelId = hotel2.id, message = "was bad", stars = 1))
+    }
+
+    @EventListener
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    fun initDashboards(event: ApplicationReadyEvent) {
+        clearAll()
+
+        val hotel1 = hotelRepository.save(aDummyHotel().toHotelEntity())
+        roomRepository.save(RoomEntity(hotelId = hotel1.id, roomNumber = 1, RoomStatus.FREE))
+        roomRepository.save(RoomEntity(hotelId = hotel1.id, message = 2, RoomStatus.NEEDS_CLEANING))
+        roomRepository.save(RoomEntity(hotelId = hotel1.id, message = 2, RoomStatus.NEEDS_CLEANING))
+
+        val hotel2 = hotelRepository.save(aDummyHotel(name = "Other Hotel").toHotelEntity())
+        roomRepository.save(ReviewEntity(hotelId = hotel2.id, roomNumber = 2, RoomStatus.OCCUPIED))
     }
 }
 

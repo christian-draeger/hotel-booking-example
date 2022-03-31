@@ -1,4 +1,4 @@
-package codes.draeger.hotels.repository.enties
+package codes.draeger.hotels.repository.entities
 
 import codes.draeger.hotels.model.Review
 import java.util.*

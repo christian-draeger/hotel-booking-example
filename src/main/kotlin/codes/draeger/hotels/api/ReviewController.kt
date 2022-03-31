@@ -2,7 +2,7 @@ package codes.draeger.hotels.api
 
 import codes.draeger.hotels.model.*
 import codes.draeger.hotels.repository.ReviewRepository
-import codes.draeger.hotels.repository.enties.ReviewEntity
+import codes.draeger.hotels.repository.entities.ReviewEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController

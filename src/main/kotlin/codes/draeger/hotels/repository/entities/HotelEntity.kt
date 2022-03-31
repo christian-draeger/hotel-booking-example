@@ -1,8 +1,9 @@
-package codes.draeger.hotels.repository.enties
+package codes.draeger.hotels.repository.entities
 
 import codes.draeger.hotels.model.Address
 import codes.draeger.hotels.model.Hotel
 import codes.draeger.hotels.model.Review
+import codes.draeger.hotels.model.Room
 import java.util.*
 import javax.persistence.*
 
@@ -20,7 +21,11 @@ class HotelEntity( // HotelDAO
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "hotel_id")
-    var reviews: MutableSet<ReviewEntity>
+    var reviews: MutableSet<ReviewEntity>,
+
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "hotel_id")
+    var rooms: MutableSet<RoomEntity>
 )
 
 @Embeddable
@@ -53,6 +58,7 @@ fun Hotel.toHotelEntity(): HotelEntity {
             zipCode = address.zipCode,
             city = address.city
         ),
-        reviews = mutableSetOf()
+        reviews = mutableSetOf(),
+        rooms =mutableSetOf()
     )
 }
