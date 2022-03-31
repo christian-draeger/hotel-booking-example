@@ -1,5 +1,7 @@
 package codes.draeger.hotels.model
 
+import java.util.*
+
 data class Hotel(
     val id: Int = 0,
     val name: String,

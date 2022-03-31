@@ -39,7 +39,7 @@ fun Hotel.toHotelResponse() = HotelResponse(
         city = address.city
     ),
     reviews = reviews.map { it.toReviewResponse() },
-    rooms = emptyList() // TODO
+    rooms = rooms.map { it.toRoomResponse() }
 )
 
 data class HotelRequest(
@@ -69,7 +69,7 @@ data class HotelResponse(
     val name: String,
     val address: Address,
     var reviews: List<ReviewResponse>,
-    var rooms: List<Room>
+    var rooms: List<RoomResponse>
 ) {
     data class Address(
         val street: String,

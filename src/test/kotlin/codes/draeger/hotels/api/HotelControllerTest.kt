@@ -1,9 +1,14 @@
 package codes.draeger.hotels.api
 
 import codes.draeger.TestContainer
-import codes.draeger.hotels.model.*
-import codes.draeger.hotels.repository.DummyHotelRepository
+import codes.draeger.hotels.model.Hotel
+import codes.draeger.hotels.model.Review
+import codes.draeger.hotels.model.Room
+import codes.draeger.hotels.model.RoomStatus
 import codes.draeger.hotels.repository.HotelRepository
+import codes.draeger.hotels.repository.ReviewRepository
+import codes.draeger.hotels.repository.RoomRepository
+import codes.draeger.hotels.testdata.aDummyHotel
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,13 +25,24 @@ import strikt.assertions.hasSize
 @AutoConfigureMockMvc
 internal class HotelControllerTest(
     @Autowired val hotelRepository: HotelRepository,
+    @Autowired val roomRepository: RoomRepository,
+    @Autowired val reviewRepository: ReviewRepository,
     @Autowired val mockMvc: MockMvc,
-): TestContainer() {
-    val testHotel = aDummyHotel()
-
+) {
+    val address = HotelRequest.Address(
+        street = "Ruyenzi",
+        number = "21",
+        zipCode = "555",
+        city = "Kigali"
+    )
+    val aHotel = HotelRequest(name= "lys",
+        address
+    )
     @BeforeEach
     fun `clearing everything`(){
         hotelRepository.deleteAll()
+	roomRepository.deleteAll()
+	reviewRepository.deleteAll()
     }
 
     @Test
@@ -40,17 +56,6 @@ internal class HotelControllerTest(
 
     @Test
     fun `can add a hotel`() {
-
-        val aHotel = HotelRequest(
-            name = "test",
-            address = HotelRequest.Address(
-                street = "",
-                number = "",
-                zipCode = "",
-                city = ""
-            )
-        )
-
         mockMvc.post("/add") {
             withJsonBody(aHotel)
         }.andExpect {
@@ -58,93 +63,85 @@ internal class HotelControllerTest(
         }
         expectThat(hotelRepository.findAll().map { it.name })
             .hasSize(1)
-            .containsExactly("test")
+            .containsExactly("lys")
 
     }
 
-    /* @Test
+    @Test
     fun `retrieve a single hotel`() {
         mockMvc.post("/add") {
-            withJsonBody(testHotel)
+            withJsonBody(aHotel)
+        }.andExpect {
+            status { isOk() }
         }
-        mockMvc.get("/all/${testHotel.id}").andExpect {
-            status { is2xxSuccessful() }
-            jsonBody { hotelRepository.listAll().find { it.id == testHotel.id } }
-        }
+        expectThat(hotelRepository.findAll().map { it.name })
+            .hasSize(1)
+            .containsExactly("lys")
 
     }
-    @Test
+     @Test
     fun `can add a review to a hotel`() {
-        val testReview = aDummyReview()
+        val testReview = Review(message = "it was nice", stars = 4)
         mockMvc.post("/add") {
-            withJsonBody(testHotel)
+            withJsonBody(aHotel)
         }
-        mockMvc.post("/add-review/${testHotel.id}") {
+         val testHotel = hotelRepository.findAll().last();
+        mockMvc.post("/review/add/${testHotel.id}") {
             withJsonBody(testReview)
         }.andExpect {
-            status { is2xxSuccessful() }
+            status { isOk() }
         }
-        hotelRepository.listAll().find { it.id == testHotel.id }
-            ?.let { expectThat(it.reviews).containsExactly(testReview) }
-
+	  expectThat(reviewRepository.findAll().map { it.message })
+            .hasSize(1)
+            .containsExactly("it was nice")  
+        
 
     }
+    val testRoom = Room(roomNumber = 200, RoomStatus.FREE)
     @Test
     fun `can add a room to a hotel`() {
-        val testRoom = aDummyRoom()
         mockMvc.post("/add") {
-            withJsonBody(testHotel)
+            withJsonBody(aHotel)
         }
-        mockMvc.post("/add-room/${testHotel.id}") {
-            withJsonBody(testRoom.roomNumber)
+        val testHotel = hotelRepository.findAll().last();
+	mockMvc.post("/room/add/${testHotel.id}") {
+            withJsonBody(testRoom)
         }.andExpect {
-            status { is2xxSuccessful() }
+            status { isOk() }
         }
-        hotelRepository.listAll().find { it.id == testHotel.id }
-            ?.let { expectThat(it.rooms).containsExactly(testRoom) }
-        }
+	   
+        expectThat(roomRepository.findAll().map { it.roomNumber })
+            .hasSize(1)
+            .containsExactly(200)
+    }
 
 
     @Test
     fun `can change status of a room`() {
 
-        val testRoom = aDummyRoom()
         val testRoomStatus = RoomStatus.NEEDS_CLEANING
         mockMvc.post("/add") {
-            withJsonBody(testHotel)
+            withJsonBody(aHotel)
         }
-        mockMvc.post("/add-room/${testHotel.id}") {
-            withJsonBody(testRoom.roomNumber)
+        val testHotel = hotelRepository.findAll().find { aHotel.name == it.name };
+        if (testHotel != null) {
+            mockMvc.post("/room/add/${testHotel.id}") {
+                withJsonBody(testRoom)
+            }
+            mockMvc.patch("/room/${testHotel.id}/change-status/${testRoom.roomNumber}") {
+                withJsonBody(testRoomStatus)
+            }.andExpect {
+                status { isOk() }
+            }
+	     expectThat(roomRepository.findAll().map { it.status })
+            .hasSize(1)
+            .containsExactly(testRoomStatus)
         }
-        mockMvc.patch("/all/${testHotel.id}/change-status/${testRoom.roomNumber}") {
-            withJsonBody(testRoomStatus)
-        }.andExpect {
-            status { is2xxSuccessful() }
-        }
-        hotelRepository.listAll().find { it.id == testHotel.id }?.rooms?.
-        find { it.roomNumber == testRoom.roomNumber }?.
-        let { expectThat(it.status).equals(testRoomStatus)}
+	
+
     }
 
-    //negative test
-    @Test
-    fun `passing in the status value not equal to one of the enum values`() {
 
-        val testRoom = aDummyRoom()
-        val testRoomStatus = "it's open"
-        mockMvc.post("/add") {
-            withJsonBody(testHotel)
-        }
-        mockMvc.post("/add-room/${testHotel.id}") {
-            withJsonBody(testRoom)
-        }
-        mockMvc.patch("/all/${testHotel.id}/change-status/${testRoom.roomNumber}") {
-            withJsonBody(testRoomStatus)
-        }.andExpect {
-            status { isEqualTo(400) }
-        }
-
-    } */
 
 
     private fun <T> MockHttpServletRequestDsl.withJsonBody(t: T) {
