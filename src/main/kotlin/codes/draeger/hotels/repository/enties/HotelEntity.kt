@@ -20,7 +20,11 @@ class HotelEntity( // HotelDAO
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "hotel_id")
-    var reviews: MutableSet<ReviewEntity>
+    var reviews: MutableSet<ReviewEntity>,
+    
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "hotel_id")
+    var rooms: MutableSet<RoomEntity>
 )
 
 @Embeddable
@@ -40,7 +44,8 @@ fun HotelEntity.toHotel(): Hotel {
             zipCode = address.zipCode,
             city = address.city
         ),
-        reviews = reviews.map { it.toReview() }.toMutableList()
+        reviews = reviews.map { it.toReview() }.toMutableList(),
+	rooms = rooms.map { it.toRoom() }.toMutableList()
     )
 }
 
@@ -53,6 +58,7 @@ fun Hotel.toHotelEntity(): HotelEntity {
             zipCode = address.zipCode,
             city = address.city
         ),
-        reviews = mutableSetOf()
+        reviews = mutableSetOf(),
+        rooms = mutableSetOf()
     )
 }

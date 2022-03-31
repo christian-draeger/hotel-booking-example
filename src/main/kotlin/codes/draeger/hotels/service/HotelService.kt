@@ -3,6 +3,7 @@ package codes.draeger.hotels.service
 import codes.draeger.hotels.model.Hotel
 import codes.draeger.hotels.repository.HotelRepository
 import codes.draeger.hotels.repository.ReviewRepository
+import codes.draeger.hotels.repository.RoomRepository
 import codes.draeger.hotels.repository.enties.HotelEntity
 import codes.draeger.hotels.repository.enties.toHotel
 import codes.draeger.hotels.repository.enties.toHotelEntity
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service
 class HotelService(
     private val hotelRepository: HotelRepository,
     private val reviewRepository: ReviewRepository,
+    private val roomRepository: RoomRepository
 ) {
     fun add(hotel: Hotel) {
         hotelRepository.save(hotel.toHotelEntity())
@@ -22,6 +24,7 @@ class HotelService(
         val hotels = hotelRepository.findAll()
         hotels.forEach {
             it.reviews = reviewRepository.findByHotelId(it.id).toMutableSet()
+            it.rooms = roomRepository.findByHotelId(it.id).toMutableSet()
         }
         return hotels.map { it.toHotel() }
     }

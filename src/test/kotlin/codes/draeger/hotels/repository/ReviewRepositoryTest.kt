@@ -26,5 +26,8 @@ class ReviewRepositoryTest(
 
         val reviews = reviewRepository.findByHotelId(hotel.id)
         expectThat(reviews).containsExactly(review)
+        reviewRepository.deleteAll()
+	hotelRepository.deleteAll()
+        
     }
 }
